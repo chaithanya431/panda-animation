@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Panda Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f8ff;
+            margin: 0;
+        }
+
+        .panda-container {
+            position: relative;
+            width: 300px;
+            text-align: center;
+        }
+
+        .panda-face {
+            width: 200px;
+            height: 200px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .panda-ear {
+            width: 60px;
+            height: 60px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: -20px;
+        }
+
+        .ear-left {
+            left: 30px;
+        }
+
+        .ear-right {
+            right: 30px;
+        }
+
+        .panda-eye {
+            width: 50px;
+            height: 70px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 60px;
+        }
+
+        .eye-left {
+            left: 40px;
+        }
+
+        .eye-right {
+            right: 40px;
+        }
+
+        .eye-cover {
+            width: 50px;
+            height: 70px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 60px;
+            transform: translateY(-70px);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .cover-left {
+            left: 40px;
+        }
+
+        .cover-right {
+            right: 40px;
+        }
+
+        .panda-eye-pupil {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+            left: 15px;
+        }
+
+        .panda-nose {
+            width: 30px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .panda-mouth {
+            width: 60px;
+            height: 30px;
+            border-bottom: 3px solid #333;
+            border-radius: 0 0 50% 50%;
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .login-form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Animation when typing in password */
+        .password-field:focus ~ .panda-face .eye-cover {
+            transform: translateY(0);
+        }
+
+        .password-field:not(:placeholder-shown) ~ .panda-face .eye-cover {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="panda-container">
+        <div class="panda-face">
+            <div class="panda-ear ear-left"></div>
+            <div class="panda-ear ear-right"></div>
+            <div class="panda-eye eye-left">
+                <div class="panda-eye-pupil"></div>
+            </div>
+            <div class="panda-eye eye-right">
+                <div class="panda-eye-pupil"></div>
+            </div>
+            <div class="eye-cover cover-left"></div>
+            <div class="eye-cover cover-right"></div>
+            <div class="panda-nose"></div>
+            <div class="panda-mouth"></div>
+        </div>
+        
+        <form class="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="password-field" placeholder="Enter your password">
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        // Optional: Add some interactive eye movement
+        document.addEventListener('mousemove', (e) => {
+            const eyes = document.querySelectorAll('.panda-eye-pupil');
+            const pandaFace = document.querySelector('.panda-face');
+            const faceRect = pandaFace.getBoundingClientRect();
+            const faceCenterX = faceRect.left + faceRect.width / 2;
+            const faceCenterY = faceRect.top + faceRect.height / 2;
+            
+            // Calculate angle between mouse and face center
+            const angle = Math.atan2(e.clientY - faceCenterY, e.clientX - faceCenterX);
+            
+            // Move pupils (limited to stay within eyes)
+            const distance = 5;
+            eyes.forEach(eye => {
+                const eyeRect = eye.parentElement.getBoundingClientRect();
+                const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+                const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+                
+                const newX = Math.cos(angle) * distance;
+                const newY = Math.sin(angle) * distance;
+                
+                eye.style.transform = `translate(${newX}px, ${newY}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
